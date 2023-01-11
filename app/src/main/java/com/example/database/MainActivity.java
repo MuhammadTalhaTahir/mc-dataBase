@@ -39,8 +39,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.addBtn:
-                listOfTask.add(!textView.getText().toString().equals("")?textView.getText().toString():"😑");
+                String task = textView.getText().toString().equals("")?"😑 🙄":textView.getText().toString();
+                db.insert(task);
+                adpt.add(task);
                 adpt.notifyDataSetChanged();
+                break;
         }
     }
 }
