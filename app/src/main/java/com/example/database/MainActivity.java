@@ -28,11 +28,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         addBtn.setOnClickListener(this);
         textView = findViewById(R.id.editText);
         listView = findViewById(R.id.listView);
-        listOfTask = new ArrayList<String>();
+        db = new databaseContext(this);
+
+        listOfTask = db.getAll();
         adpt = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, this.listOfTask);
 
         listView.setAdapter(adpt);
-        db = new databaseContext(this);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                db.remove(listOfTask.get(i));
+                listOfTask.remove(i);
+                adpt.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -43,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 db.insert(task);
                 adpt.add(task);
                 adpt.notifyDataSetChanged();
+                textView.setText("");
                 break;
         }
     }

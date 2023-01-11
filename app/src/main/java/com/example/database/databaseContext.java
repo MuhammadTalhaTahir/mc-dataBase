@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -35,8 +36,17 @@ public class databaseContext extends SQLiteOpenHelper {
     public ArrayList<String> getAll(){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "select description from tasks";
-        Cursor cursor = db.rawQuery(query);
-        
-        return new ArrayList<String>();
+        Cursor cursor = db.rawQuery(query ,null);
+        ArrayList<String> result =  new ArrayList<String>();
+        while(cursor.moveToNext()){
+            result.add(cursor.getString(0));
+        }
+        return result;
+    }
+    public void remove(String dec){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "delete from tasks where description == '" + dec + "'; ";
+        Log.d("query:", query);
+        db.execSQL(query);
     }
 }
